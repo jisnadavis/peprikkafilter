@@ -262,6 +262,9 @@ const filtrarPrice = (input) => {
       pricefiltred.push(product)
     }
   }
+  if (pricefiltred.length != 0) {
+    errordiv.classList.remove('error')
+  }
   printproducts(pricefiltred)
 }
 const filterall = () => {
@@ -277,6 +280,7 @@ const filterall = () => {
       'No products found matching the selected criteria. please reset filter'
     )
   }
+
   if (filtredbyall.length != 0) {
     errordiv.classList.remove('error')
   }
