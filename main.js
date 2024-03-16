@@ -246,7 +246,7 @@ const filtrar = () => {
 const filtrarbyall = () => {
   if (selectormodel.selectedIndex == 0) {
     const filteredData = products.filter((product) => {
-      if (product.price == PRICE) {
+      if (product.price <= PRICE) {
         return product
       }
     })
