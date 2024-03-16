@@ -258,7 +258,7 @@ const filtrarbyall = () => {
     const selectedModel = model
 
     const filteredData = products.filter((product) => {
-      if (product.name === selectedModel && product.price == PRICE) {
+      if (product.name === selectedModel && product.price <= PRICE) {
         return product
       }
     })
@@ -334,11 +334,11 @@ selectormodel.addEventListener('change', (e) => {
 const priceinput = document.createElement('input')
 priceinput.id = 'input'
 priceinput.type = 'number'
-priceinput.min = 10.99
-priceinput.max = 20.99
+priceinput.min = 10
+priceinput.max = 20
 priceinput.step = 2
 priceinput.className = 'inputprice'
-priceinput.placeholder = 'filtrar por precio'
+priceinput.placeholder = 'enter your max price'
 const buttondiv = document.createElement('div')
 buttondiv.className = 'buttondiv'
 const pricebutton = document.createElement('button')
@@ -354,7 +354,6 @@ resetbutton.addEventListener('click', () => {
   selectormodel.selectedIndex = 0
   priceinput.value = ''
   printproducts(products)
-  errordiv.classList.remove('error')
 })
 window.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
