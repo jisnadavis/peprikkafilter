@@ -222,16 +222,8 @@ const products = [
 const lists = ['home', 'aboutus', 'login', 'buynow', 'logout']
 const modelos = []
 let model = ''
-const errordiv = document.createElement('div')
-errordiv.className = 'error'
-function showerrormessage(message) {
-  errordiv.classList.add('error')
-  errordiv.innerHTML = ''
-  const msgeh1 = document.createElement('h1')
-  msgeh1.textContent = message
-  errordiv.appendChild(msgeh1)
-  maindiv.appendChild(errordiv)
-}
+let PRICE = parseInt('')
+
 const fillmodels = (item) => {
   for (const item of products) {
     const productName = item.name.trim()
@@ -242,50 +234,42 @@ const fillmodels = (item) => {
 }
 fillmodels(products)
 const uniquemodels = [...new Set(modelos)]
-const filtrarmodel = () => {
-  const filtredmodel = []
-  for (const item of products) {
-    if (model == item.name) {
-      filtredmodel.push(item)
-    }
-  }
-  if (filtredmodel.length != 0) {
-    errordiv.classList.remove('error')
-  }
-  printproducts(filtredmodel)
-}
-//filtrar por price
-const filtrarPrice = (input) => {
-  const pricefiltred = []
-  for (const product of products) {
-    if (product.price <= input.value) {
-      pricefiltred.push(product)
-    }
-  }
-  if (pricefiltred.length != 0) {
-    errordiv.classList.remove('error')
-  }
-  printproducts(pricefiltred)
-}
-const filterall = () => {
-  const selectedmodel = selectormodel.value
-  const selectedprice = priceinput.value
-  const filtredbyall = products.filter((product) => {
-    if (product.name == selectedmodel && product.price <= selectedprice) {
+const filtrar = () => {
+  const filtred = products.filter((product) => {
+    if (product.name == model) {
       return product
     }
   })
-  if (filtredbyall.length == 0) {
-    showerrormessage(
-      'No products found matching the selected criteria. please reset filter'
-    )
-  }
 
-  if (filtredbyall.length != 0) {
-    errordiv.classList.remove('error')
-  }
-  printproducts(filtredbyall)
+  printproducts(filtred)
 }
+const filtrarbyall = () => {
+  if (selectormodel.selectedIndex == 0) {
+    const filteredData = products.filter((product) => {
+      if (product.price == PRICE) {
+        return product
+      }
+    })
+    if (filteredData.length == 0) {
+      alert('No items match the criteria. Please reset filters.')
+    }
+    printproducts(filteredData)
+  } else {
+    const selectedModel = model
+
+    const filteredData = products.filter((product) => {
+      if (product.name === selectedModel && product.price == PRICE) {
+        return product
+      }
+    })
+    if (filteredData.length == 0) {
+      alert('No items match the criteria. Please reset filters.')
+    }
+
+    printproducts(filteredData)
+  }
+}
+
 const header = document.querySelector('header')
 const img = document.createElement('img')
 img.src = './asimg/logo.png'
@@ -344,11 +328,9 @@ uniquemodels.forEach((uniquemodel) => {
 })
 selectormodel.addEventListener('change', (e) => {
   model = e.target.value
-  filtrarmodel()
-  priceinput.value = ''
+  filtrar()
 })
 //selecting price
-
 const priceinput = document.createElement('input')
 priceinput.id = 'input'
 priceinput.type = 'number'
@@ -359,51 +341,39 @@ priceinput.className = 'inputprice'
 priceinput.placeholder = 'filtrar por precio'
 const buttondiv = document.createElement('div')
 buttondiv.className = 'buttondiv'
-
 const pricebutton = document.createElement('button')
-pricebutton.textContent = 'filtrar por price'
+pricebutton.textContent = 'filtrar'
 pricebutton.addEventListener('click', () => {
-  filtrarPrice(priceinput)
-  selectormodel.selectedIndex = 0
+  PRICE = priceinput.value
+  filtrarbyall()
 })
 const resetbutton = document.createElement('button')
 resetbutton.id = 'reset'
 resetbutton.textContent = 'resetfilters'
-
 resetbutton.addEventListener('click', () => {
   selectormodel.selectedIndex = 0
   priceinput.value = ''
   printproducts(products)
   errordiv.classList.remove('error')
 })
-const filtrarall = document.createElement('button')
-filtrarall.textContent = 'filtar por all'
-filtrarall.addEventListener('click', filterall)
-
 window.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
-    filtrarPrice(input)
+    filtrar()
   }
 })
-
 divfilter.appendChild(selectormodel)
-
 aside.appendChild(divfilter)
 divfilter.appendChild(priceinput)
 buttondiv.appendChild(pricebutton)
-buttondiv.appendChild(filtrarall)
 aside.appendChild(buttondiv)
 aside.appendChild(resetbutton)
-
 //creating products on the rightside
 const productscontainer = document.createElement('div')
 productscontainer.className = 'productscontiner'
 const printproducts = (items) => {
   productscontainer.innerHTML = ''
-
   for (const product of items) {
     const productdiv = document.createElement('div')
-
     productdiv.className = 'product'
     const imgdiv = document.createElement('div')
     imgdiv.className = 'productsize'
@@ -415,10 +385,8 @@ const printproducts = (items) => {
     hoverdiv.className = 'love'
     const lovebutton = document.createElement('button')
     const buynowbutton = document.createElement('button')
-
     const loveimg = document.createElement('img')
     const buynowimg = document.createElement('img')
-
     const productname = document.createElement('h3')
     productname.textContent = product.name
     const precio = document.createElement('p')
